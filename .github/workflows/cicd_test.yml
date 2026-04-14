@@ -36,8 +36,28 @@ jobs:
           name: coverage-report
           path: coverage.xml
         
-      
     
+  ruff-check:
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Set up Python
+          uses: actions/setup-python@v5
+          with:
+            python-version: "3.11"
+
+        - name: Install Ruff
+          run: |
+            python -m pip install --upgrade pip
+            pip install ruff
+
+        - name: Run Ruff checks (lint only)
+          run: |
+            ruff check .
+   
   lint:
     runs-on: ubuntu-latest
 
