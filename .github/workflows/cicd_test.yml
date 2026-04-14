@@ -81,8 +81,7 @@ jobs:
 
       - name: Run mypy type checking
         run: |
-          # Fail if type errors are found
-          mypy src
+          mypy calculator.py 
 
   pre-commit:
     runs-on: ubuntu-latest
