@@ -54,10 +54,10 @@ jobs:
             python -m pip install --upgrade pip
             pip install ruff
 
-        - name: Run Ruff checks (lint only)
+        - name: Run Ruff checks (fail on any issue)
           run: |
-            ruff check .
-   
+          ruff check .
+
   lint:
     runs-on: ubuntu-latest
 
@@ -79,9 +79,7 @@ jobs:
         run: |
           # Fail if any linting errors are found
           flake8 .
-        
-      
-    
+     
   type-check:
     runs-on: ubuntu-latest
 
