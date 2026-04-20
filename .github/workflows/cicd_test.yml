@@ -3,7 +3,7 @@ name: Code Coverage Check
 on:
   push:
     branches:
-      - '**'   # runs on all branches being pushed
+      - '**' 
 
 jobs:
   coverage:
@@ -136,3 +136,25 @@ jobs:
         with:
           name: precommit-report
           path: precommit.xml
+
+  solid-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install solid-checker
+      - name: Run Solid-Checker
+        run: |
+          solid-checker analyze . --format json > solid_report.json
+      - name: Check Score Threshold
+        run: |
+          SCORE=$(jq '.overall_score' solid_report.json)
+          if (( $(echo "$SCORE < 70" | bc -l) )); then
+            echo "Code quality score too low: $SCORE"
+            exit 1
