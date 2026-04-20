@@ -188,7 +188,7 @@ jobs:
 
       - name: Upload XML Report
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: solid-checker-report
           path: solid_report.xml
