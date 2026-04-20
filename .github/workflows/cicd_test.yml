@@ -25,12 +25,14 @@ jobs:
           pip install pytest coverage
 
       - name: Run tests with coverage
+        if: always()
         run: |
           coverage run -m pytest
           coverage report -m fail under=90
           coverage xml
 
       - name: Upload coverage report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
@@ -61,11 +63,14 @@ jobs:
           flake8 . | tee lint.log
 
       - name: Save lint log
+        if: always()
         run: |
           echo "<lint>" > lint.xml
           sed 's/^/<line>/' lint.log | sed 's/$/<\/line>/' >> lint.xml
           echo "</lint>" >> lint.xml
+      
       - name: Upload lint xml
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: lint-report
@@ -95,12 +100,14 @@ jobs:
           mypy calculator.py  | tee mypy.log
 
       - name: Save mypy log
+        if: always()
         run: |
           echo "<mypy>" > mypy.xml
           sed 's/^/<line>/' mypy.log | sed 's/$/<\/line>/' >> mypy.xml
           echo "</mypy>" >> mypy.xml
 
       - name: Upload mypy xml
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: mypy-report
@@ -126,12 +133,14 @@ jobs:
         run: pre-commit run --all-files | tee pre-commit.log
 
       - name: Save pre-commit log
+        if: always()
         run: |
           echo "<precommit>" > precommit.xml
           sed 's/^/<line>/' precommit.log | sed 's/$/<\/line>/' >> precommit.xml
           echo "</precommit>" >> precommit.xml
 
       - name: Upload pre-commit xml
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: precommit-report
