@@ -155,7 +155,8 @@ jobs:
 
       - name: Run Solid-Checker
         run: |
-          solid-checker analyze . --format json > solid_report.json
+          set PYTHONUTF8=1          
+          solid-checker --report calculator.py --json > solid_report.json
 
       - name: Evaluate Score
         run: |
