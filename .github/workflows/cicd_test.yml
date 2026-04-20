@@ -140,21 +140,33 @@ jobs:
   solid-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install solid-checker
+          pip install solid-checker jq
+
       - name: Run Solid-Checker
         run: |
           solid-checker analyze . --format json > solid_report.json
-      - name: Check Score Threshold
+
+      - name: Evaluate Score
         run: |
           SCORE=$(jq '.overall_score' solid_report.json)
-          if (( $(echo "$SCORE < 70" | bc -l) )); then
-            echo "Code quality score too low: $SCORE"
+          echo "Overall Score: $SCORE"
+          if (( $(echo "$SCORE > 70" | bc -l) )); then
+            echo "✅ Code quality acceptable, continuing pipeline."
+          else
+            echo "❌ Code quality score too low: $SCORE"
+            echo "Generating report..."
+            cat solid_report.json
             exit 1
+          fi
+
