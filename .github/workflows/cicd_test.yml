@@ -158,16 +158,25 @@ jobs:
           set PYTHONUTF8=1          
           solid-checker --report calculator.py --json > solid_report.json
 
-      - name: Evaluate Score
+      - name: Run Solid-Checker and Evaluate Score
         run: |
-          SCORE=$(jq -r '.overall_score' solid_report.json)
-          echo "Overall Score: $SCORE"
-          if (( $(echo "$SCORE > 70" | bc -l) )); then
+          OUTPUT=$(solid-checker --report calculator.py)
+          echo "$OUTPUT"
+
+          # Extract the numeric part of "Overall SOLID Score: 1.00/1.00"
+          SCORE=$(echo "$OUTPUT" | grep "Overall SOLID Score" | awk '{print $4}' | cut -d'/' -f1)
+
+          echo "Extracted Overall SOLID Score: $SCORE"
+
+          # Compare against threshold (70%)
+          SCORE_INT=$(echo "$SCORE*100" | bc | cut -d'.' -f1)
+
+          if [ "$SCORE_INT" -gt 70 ]; then
             echo "✅ Code quality acceptable, continuing pipeline."
           else
             echo "❌ Code quality score too low: $SCORE"
             echo "Generating report..."
-            cat solid_report.json
+            echo "$OUTPUT"
             exit 1
           fi
 
