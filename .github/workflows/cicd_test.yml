@@ -160,7 +160,7 @@ jobs:
 
       - name: Evaluate Score
         run: |
-          SCORE=$(jq '.overall_score' solid_report.json)
+          SCORE=$(jq -r '.overall_score' solid_report.json)
           echo "Overall Score: $SCORE"
           if (( $(echo "$SCORE > 70" | bc -l) )); then
             echo "✅ Code quality acceptable, continuing pipeline."
