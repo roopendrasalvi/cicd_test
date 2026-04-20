@@ -184,7 +184,7 @@ jobs:
         if: always()   
         run: |
           echo "Generating XML report..."
-          solid-checker --report calculator.py --format xml > solid_report.xml
+          solid-checker --report calculator.py > solid_report.xml
 
       - name: Upload XML Report
         if: always()
