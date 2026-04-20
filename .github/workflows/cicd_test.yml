@@ -180,3 +180,16 @@ jobs:
             exit 1
           fi
 
+      - name: Generate XML Report
+        if: always()   
+        run: |
+          echo "Generating XML report..."
+          solid-checker --report calculator.py --format xml > solid_report.xml
+
+      - name: Upload XML Report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: solid-checker-report
+          path: solid_report.xml
+
