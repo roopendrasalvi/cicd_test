@@ -173,8 +173,8 @@ jobs:
           echo "$OUTPUT"
 
           # Extract the numeric part of "Overall SOLID Score: 1.00/1.00"
-          SCORE=$(solid-checker --report calculator.py | awk -F' ' '/Overall SOLID Score/ {print $4}' | cut -d'/' -f1)
-          echo "Extracted Overall SOLID Score: $SCORE"
+          SCORE=$(solid-checker --report calculator.py | awk -F' ' '/Overall SOLID Score/ {print $5}' | cut -d'/' -f1)
+          echo "Extracted Overall SOLID SCORE: $SCORE"
 
           # Compare against threshold (70%)
           SCORE_INT=$(echo "$SCORE*100" | bc | cut -d'.' -f1)
